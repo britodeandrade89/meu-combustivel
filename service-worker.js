@@ -1,14 +1,9 @@
-const CACHE_NAME = 'fuel-control-cache-v3'; // Incremented cache version
+const CACHE_NAME = 'fuel-control-cache-v7'; // Incremented cache version
 const urlsToCache = [
     './',
     './index.html',
     './manifest.json',
-    './index.tsx', // The single, monolithic app file
-    './icons/icon-192x192.png',
-    './icons/icon-512x512.png',
-    // CDNs
-    'https://cdn.tailwindcss.com',
-    'https://unpkg.com/@babel/standalone/babel.min.js',
+    './index.tsx',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
 ];
 
@@ -20,10 +15,22 @@ self.addEventListener('install', event => {
                 console.log('Opened cache and caching files');
                 return cache.addAll(urlsToCache);
             })
+            .catch(error => {
+                console.error('Failed to cache files during install:', error);
+            })
     );
 });
 
 self.addEventListener('fetch', event => {
+    // For navigation requests, always try network first to get the latest version,
+    // falling back to cache if offline.
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request).catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then(response => {
@@ -32,28 +39,16 @@ self.addEventListener('fetch', event => {
                     return response;
                 }
 
-                // Clone the request because it's a stream and can only be consumed once.
                 const fetchRequest = event.request.clone();
 
                 return fetch(fetchRequest).then(
                     response => {
-                        // Check if we received a valid response
                         if (!response || response.status !== 200 || (response.type !== 'basic' && response.type !== 'cors')) {
                             return response;
                         }
 
-                        // Clone the response because it's also a stream.
-                        const responseToCache = response.clone();
-
-                        caches.open(CACHE_NAME)
-                            .then(cache => {
-                                // We don't cache POST requests or chrome-extension requests
-                                if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension://')) {
-                                    return;
-                                }
-                                cache.put(event.request, responseToCache);
-                            });
-
+                        // We only cache the essential files listed in urlsToCache.
+                        // No dynamic caching for other requests to avoid CORS or other errors.
                         return response;
                     }
                 );

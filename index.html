@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Combustivel AI</title>
+    <script>
+        // Shim for process.env to prevent ReferenceError in browser-only environments.
+        // This allows the app to run and for the hosting environment to inject the actual API_KEY.
+        if (typeof process === 'undefined') {
+            window.process = { env: {} };
+        }
+    </script>
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#111827">
     <script src="https://cdn.tailwindcss.com"></script>
