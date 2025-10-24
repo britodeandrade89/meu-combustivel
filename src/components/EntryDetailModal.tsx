@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import type { ProcessedFuelEntry } from '../types.ts';
 import { CloseIcon, EditIcon } from './Icons.tsx';

@@ -1,4 +1,5 @@
 
+
 import React, { useState, useMemo } from 'react';
 import type { ProcessedFuelEntry } from '../types.ts';
 import { LoadingSpinner, SearchIcon } from './Icons.tsx';

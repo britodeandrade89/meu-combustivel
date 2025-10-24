@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { CloseIcon, LoadingSpinner, SparklesIcon } from './Icons.tsx';
 import { getTripEstimateFromGemini } from '../services/geminiService.ts';
