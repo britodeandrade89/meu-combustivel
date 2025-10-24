@@ -4,14 +4,14 @@
   "description": "Um painel completo para rastrear despesas com combustível, analisar padrões de consumo com IA e gerenciar cronogramas de manutenção de veículos.",
   "icons": [
     {
-      "src": "/assets/icons/icon-192x192.png",
-      "type": "image/png",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='%2322c55e'><path d='M12 8C12 5.79 13.79 4 16 4h20c2.21 0 4 1.79 4 4v36h8v4c0 2.21-1.79 4-4 4H20c-2.21 0-4-1.79-4-4v-4h-4V8zm24 2v12h-16V10h16zM40 28h14c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H40v-12z'/><path d='M56 34h4v14c0 3.31-2.69 6-6 6h-4' stroke='%23374151' fill='none' stroke-width='5' stroke-linecap='round'/></svg>",
+      "type": "image/svg+xml",
       "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "/assets/icons/icon-512x512.png",
-      "type": "image/png",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' fill='%2322c55e'><path d='M12 8C12 5.79 13.79 4 16 4h20c2.21 0 4 1.79 4 4v36h8v4c0 2.21-1.79 4-4 4H20c-2.21 0-4-1.79-4-4v-4h-4V8zm24 2v12h-16V10h16zM40 28h14c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2H40v-12z'/><path d='M56 34h4v14c0 3.31-2.69 6-6 6h-4' stroke='%23374151' fill='none' stroke-width='5' stroke-linecap='round'/></svg>",
+      "type": "image/svg+xml",
       "sizes": "512x512",
       "purpose": "any maskable"
     }

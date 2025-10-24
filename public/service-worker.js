@@ -1,11 +1,9 @@
-const CACHE_NAME = 'fuel-control-cache-v3'; // Incremented cache version
+const CACHE_NAME = 'fuel-control-cache-v4'; // Incremented cache version
 const urlsToCache = [
     '/',
     '/index.html',
     '/manifest.json',
     '/src/index.tsx', // The single, monolithic app file
-    '/assets/icons/icon-192x192.png',
-    '/assets/icons/icon-512x512.png',
     // CDNs
     'https://cdn.tailwindcss.com',
     'https://unpkg.com/@babel/standalone/babel.min.js',
