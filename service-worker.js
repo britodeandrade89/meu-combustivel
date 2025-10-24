@@ -1,32 +1,23 @@
-const CACHE_NAME = 'fuel-control-cache-v2';
+const CACHE_NAME = 'fuel-control-cache-v3'; // Incremented cache version
 const urlsToCache = [
     './',
     './index.html',
     './manifest.json',
-    './index.tsx',
-    './src/App.tsx',
-    './src/types.ts',
-    './src/services/geminiService.ts',
-    './src/components/Icons.tsx',
-    './src/components/EntryModal.tsx',
-    './src/components/TripModal.tsx',
-    './src/components/MaintenanceModal.tsx',
-    './src/components/MonthSummary.tsx',
-    './src/components/EntryDetailModal.tsx',
-    './src/components/LoginScreen.tsx',
-    // Assumindo que os ícones existem neste caminho
+    './index.tsx', // The single, monolithic app file
     './icons/icon-192x192.png',
     './icons/icon-512x512.png',
     // CDNs
     'https://cdn.tailwindcss.com',
+    'https://unpkg.com/@babel/standalone/babel.min.js',
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
 ];
 
 self.addEventListener('install', event => {
+    self.skipWaiting(); // Force the waiting service worker to become the active service worker.
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('Opened cache');
+                console.log('Opened cache and caching files');
                 return cache.addAll(urlsToCache);
             })
     );
@@ -77,6 +68,7 @@ self.addEventListener('activate', event => {
             return Promise.all(
                 cacheNames.map(cacheName => {
                     if (cacheWhitelist.indexOf(cacheName) === -1) {
+                        console.log('Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
