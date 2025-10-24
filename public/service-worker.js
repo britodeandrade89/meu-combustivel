@@ -1,12 +1,10 @@
-const CACHE_NAME = 'fuel-control-cache-v5'; // Incremented cache version
+const CACHE_NAME = 'fuel-control-cache-v6'; // Incremented cache version
 const urlsToCache = [
     '/',
     '/index.html',
     '/manifest.json',
     '/index.tsx', // The single, monolithic app file
-    // CDNs
-    'https://cdn.tailwindcss.com',
-    'https://unpkg.com/@babel/standalone/babel.min.js',
+    // Google Fonts CDN is usually safe to cache
     'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
 ];
 
@@ -18,10 +16,22 @@ self.addEventListener('install', event => {
                 console.log('Opened cache and caching files');
                 return cache.addAll(urlsToCache);
             })
+            .catch(error => {
+                console.error('Failed to cache files during install:', error);
+            })
     );
 });
 
 self.addEventListener('fetch', event => {
+    // For navigation requests, always try network first to get the latest version,
+    // falling back to cache if offline.
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request).catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then(response => {
@@ -40,17 +50,9 @@ self.addEventListener('fetch', event => {
                             return response;
                         }
 
-                        // Clone the response because it's also a stream.
-                        const responseToCache = response.clone();
-
-                        caches.open(CACHE_NAME)
-                            .then(cache => {
-                                // We don't cache POST requests or chrome-extension requests
-                                if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension://')) {
-                                    return;
-                                }
-                                cache.put(event.request, responseToCache);
-                            });
+                        // We don't cache everything, only what's needed.
+                        // The initial cache list is the source of truth for offline assets.
+                        // Dynamic caching can be added here if needed but can be risky.
 
                         return response;
                     }
