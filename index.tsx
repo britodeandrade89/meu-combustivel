@@ -29,7 +29,7 @@ class Timestamp {
 
 
 // =================================================================================
-// TYPES (from src/types.ts)
+// TYPES
 // =================================================================================
 
 enum FuelType {
@@ -47,7 +47,6 @@ interface RawFuelEntry {
     notes: string;
 }
 
-// FIX: Use Omit to correctly override the 'date' property type from the base interface.
 interface ProcessedFuelEntry extends Omit<RawFuelEntry, 'date'> {
     date: Date;
     liters: number;
@@ -63,7 +62,7 @@ interface MaintenanceData {
 }
 
 // =================================================================================
-// ICONS (from src/components/Icons.tsx)
+// ICONS
 // =================================================================================
 
 const iconStyle: React.CSSProperties = { width: '1.25em', height: '1.25em', verticalAlign: 'middle' };
@@ -257,7 +256,7 @@ const FuelPumpIcon = ({ size = 64, className = '' }: { size?: number; className?
 
 
 // =================================================================================
-// SERVICES (from src/services/geminiService.ts)
+// SERVICES
 // =================================================================================
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -310,10 +309,9 @@ const getTripEstimateFromGemini = async (distance: number, avgKmpl: number): Pro
 
 
 // =================================================================================
-// COMPONENTS (from src/components/*)
+// COMPONENTS
 // =================================================================================
 
-// --- LoginScreen.tsx ---
 const LoginScreen: React.FC<{ onLogin: () => void; }> = ({ onLogin }) => {
     return (
         <div className="relative flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-green-900 to-black text-white p-4 text-center animate-fade-in">
@@ -365,7 +363,6 @@ const LoginScreen: React.FC<{ onLogin: () => void; }> = ({ onLogin }) => {
     );
 };
 
-// --- EntryDetailModal.tsx ---
 interface EntryDetailModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -448,7 +445,6 @@ const EntryDetailModal: React.FC<EntryDetailModalProps> = ({ isOpen, onClose, en
     );
 };
 
-// --- EntryModal.tsx ---
 interface EntryModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -468,7 +464,6 @@ const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, entryT
         totalValue: '',
         pricePerLiter: '',
         kmEnd: '',
-        // FIX: Replaced string literal with enum member for type safety.
         fuelType: FuelType.GASOLINE,
         notes: '',
     });
@@ -494,7 +489,6 @@ const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, entryT
                     totalValue: '',
                     pricePerLiter: '',
                     kmEnd: lastKm > 0 ? '' : '',
-                    // FIX: Replaced string literal with enum member for type safety.
                     fuelType: FuelType.GASOLINE,
                     notes: '',
                 });
@@ -515,7 +509,7 @@ const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, entryT
             totalValue: parseFloat(formData.totalValue) || 0,
             pricePerLiter: parseFloat(formData.pricePerLiter) || 0,
             kmEnd: parseInt(formData.kmEnd) || 0,
-            fuelType: formData.fuelType,
+            fuelType: formData.fuelType as FuelType,
             notes: formData.notes,
         };
         onSave(entryData);
@@ -571,7 +565,6 @@ const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, entryT
     );
 };
 
-// --- MaintenanceModal.tsx ---
 interface MaintenanceModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -706,7 +699,6 @@ const MaintenanceModal: React.FC<MaintenanceModalProps> = ({ isOpen, onClose, on
     );
 };
 
-// --- MonthSummary.tsx ---
 interface MonthSummaryProps {
     entries: ProcessedFuelEntry[];
     filterValue: string;
@@ -783,7 +775,6 @@ const MonthSummary: React.FC<MonthSummaryProps> = ({ entries, filterValue }) => 
     );
 };
 
-// --- TripModal.tsx ---
 interface TripModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -854,7 +845,7 @@ const TripModal: React.FC<TripModalProps> = ({ isOpen, onClose, overallAvgKmpl }
 
 
 // =================================================================================
-// MAIN APP COMPONENT (from src/App.tsx)
+// MAIN APP COMPONENT
 // =================================================================================
 
 const StatsCard: React.FC<{ icon: React.ReactNode; label: string; value: string; }> = ({ icon, label, value }) => (
@@ -869,7 +860,6 @@ const StatsCard: React.FC<{ icon: React.ReactNode; label: string; value: string;
 
 const getInitialSeedData = (): RawFuelEntry[] => {
     return [
-        // FIX: Replaced unsafe `as any` type assertion with the correct enum value for type safety.
         { id: '1', date: Timestamp.fromDate(new Date('2024-04-12T00:00:00')), totalValue: 100.00, pricePerLiter: 6.19, kmEnd: 134620, fuelType: FuelType.GASOLINE, notes: 'Posto Shell' },
         { id: '2', date: Timestamp.fromDate(new Date('2024-04-14T00:00:00')), totalValue: 100.00, pricePerLiter: 6.19, kmEnd: 134843, fuelType: FuelType.GASOLINE, notes: '' },
         { id: '3', date: Timestamp.fromDate(new Date('2024-04-16T00:00:00')), totalValue: 50.00, pricePerLiter: 5.89, kmEnd: 134932, fuelType: FuelType.GASOLINE, notes: '' },

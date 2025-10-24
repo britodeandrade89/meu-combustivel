@@ -1,10 +1,9 @@
-const CACHE_NAME = 'fuel-control-cache-v7'; // Incremented cache version
+const CACHE_NAME = 'fuel-control-cache-v8'; // Incremented cache version
 const urlsToCache = [
     './',
     './index.html',
     './manifest.json',
-    './index.tsx',
-    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap'
+    './index.tsx'
 ];
 
 self.addEventListener('install', event => {
@@ -26,7 +25,7 @@ self.addEventListener('fetch', event => {
     // falling back to cache if offline.
     if (event.request.mode === 'navigate') {
         event.respondWith(
-            fetch(event.request).catch(() => caches.match(event.request))
+            fetch(event.request).catch(() => caches.match('./index.html'))
         );
         return;
     }
@@ -39,19 +38,9 @@ self.addEventListener('fetch', event => {
                     return response;
                 }
 
-                const fetchRequest = event.request.clone();
-
-                return fetch(fetchRequest).then(
-                    response => {
-                        if (!response || response.status !== 200 || (response.type !== 'basic' && response.type !== 'cors')) {
-                            return response;
-                        }
-
-                        // We only cache the essential files listed in urlsToCache.
-                        // No dynamic caching for other requests to avoid CORS or other errors.
-                        return response;
-                    }
-                );
+                // For other requests, just fetch from network.
+                // Avoids caching external resources like fonts or CDN scripts, which can be problematic.
+                return fetch(event.request);
             })
     );
 });
