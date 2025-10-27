@@ -1,9 +1,19 @@
-const CACHE_NAME = 'fuel-control-cache-v8'; // Incremented cache version
+const CACHE_NAME = 'fuel-control-cache-v9'; // Incremented cache version
 const urlsToCache = [
     './',
     './index.html',
     './manifest.json',
-    './index.tsx'
+    './index.tsx',
+    './src/App.tsx',
+    './src/types.ts',
+    './src/services/geminiService.ts',
+    './src/components/Icons.tsx',
+    './src/components/LoginScreen.tsx',
+    './src/components/EntryDetailModal.tsx',
+    './src/components/EntryModal.tsx',
+    './src/components/MaintenanceModal.tsx',
+    './src/components/MonthSummary.tsx',
+    './src/components/TripModal.tsx'
 ];
 
 self.addEventListener('install', event => {
